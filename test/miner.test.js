@@ -1,134 +1,34 @@
 var assert = require('assert');
-var sha256 = require('../lib/miner/sha256');
 var miner = require('../lib/miner/miner');
+var minerUtil = require('../lib/miner/util');
 
 
 describe('miner', function() {
-    it('scanHash', function() {
-        var salt = sha256.Uint32ArrayFromBuffer(Buffer.from('70617373776f7264', 'hex'));
-        var data = new Uint32Array(salt.length + 1);
-        data.set(salt, 0);
+    it('scanHash1', function() {
+        var salt = Buffer.from('70617373776f7264', 'hex');
 
-        var t = new Date;
-
-        console.log(data);
-
-        var res = miner.scanHash(data, data.length - 1, 0x00afffff);
+        var res = miner.scanHash(salt, 0x00ffffff);
         var nonce = res[0], hash = res[1];
 
-        console.log(nonce, new Date - t);
-        console.log(sha256.BufferFromUint32Array(hash).toString('hex'));
+        assert.equal(nonce, 426);
+        assert.equal(minerUtil.BufferFromUint32Array(hash).toString('hex'), "00d678cf79b2813f906619f58395dfb680a450097bc9e1e214d9c4ad9f9f70ca");
     });
+    it('scanHash2', function() {
+        var salt = Buffer.from('fe23fe23fe23fe23fe23', 'hex');
 
-    it('scanhash1', function() {
-        var salt = sha256.Uint32ArrayFromBuffer(Buffer.from('70617373776f7263', 'hex'));
-        var data = new Uint32Array(salt.length + 1);
-        data.set(salt, 0);
-
-        var t = new Date;
-
-        console.log(data);
-
-        var res = miner.scanHash(data, data.length - 1, 0x00afffff);
+        var res = miner.scanHash(salt, 0x000fffff);
         var nonce = res[0], hash = res[1];
 
-        console.log(nonce, new Date - t);
-        console.log(sha256.BufferFromUint32Array(hash).toString('hex'));
+        assert.equal(nonce, 3514);
+        assert.equal(minerUtil.BufferFromUint32Array(hash).toString('hex'), "000b8e3a9223b4b41db6068d7b0974d52808c7a197d0ef4544ce96fd05934d2d");
     });
+    it('scanHash3', function() {
+        var salt = Buffer.from('fe23fe23fe23fe23fe23', 'hex');
 
-    it('scanhash2', function() {
-        var salt = sha256.Uint32ArrayFromBuffer(Buffer.from('70617373776f7264', 'hex'));
-        var data = new Uint32Array(salt.length + 1);
-        data.set(salt, 0);
-
-        var t = new Date;
-
-        console.log(data);
-
-        var res = miner.scanHash(data, data.length - 1, 0x0000ffff);
+        var res = miner.scanHash(salt, 0x00057fff);
         var nonce = res[0], hash = res[1];
 
-        console.log(nonce, new Date - t);
-        console.log(sha256.BufferFromUint32Array(hash).toString('hex'));
-    });
-
-    it('scanhash2b', function() {
-        var salt = sha256.Uint32ArrayFromBuffer(Buffer.from('70617373776f7263', 'hex'));
-        var data = new Uint32Array(salt.length + 1);
-        data.set(salt, 0);
-
-        var t = new Date;
-
-        console.log(data);
-
-        var res = miner.scanHash(data, data.length - 1, 0x0000ffff);
-        var nonce = res[0], hash = res[1];
-
-        console.log(nonce, new Date - t);
-        console.log(sha256.BufferFromUint32Array(hash).toString('hex'));
-    });
-
-    it('scanhash3', function() {
-        var salt = sha256.Uint32ArrayFromBuffer(Buffer.from('70617373776f7264', 'hex'));
-        var data = new Uint32Array(salt.length + 1);
-        data.set(salt, 0);
-
-        var t = new Date;
-
-        console.log(data);
-
-        var res = miner.scanHash(data, data.length - 1, 0x00008fff);
-        var nonce = res[0], hash = res[1];
-
-        console.log(nonce, new Date - t);
-        console.log(sha256.BufferFromUint32Array(hash).toString('hex'));
-    });
-
-    it('scanhash3b', function() {
-        var salt = sha256.Uint32ArrayFromBuffer(Buffer.from('70617373776f7263', 'hex'));
-        var data = new Uint32Array(salt.length + 1);
-        data.set(salt, 0);
-
-        var t = new Date;
-
-        console.log(data);
-
-        var res = miner.scanHash(data, data.length - 1, 0x00008fff);
-        var nonce = res[0], hash = res[1];
-
-        console.log(nonce, new Date - t);
-        console.log(sha256.BufferFromUint32Array(hash).toString('hex'));
-    });
-
-    it('scanhash4', function() {
-        var salt = sha256.Uint32ArrayFromBuffer(Buffer.from('70617373776f7264', 'hex'));
-        var data = new Uint32Array(salt.length + 1);
-        data.set(salt, 0);
-
-        var t = new Date;
-
-        console.log(data);
-
-        var res = miner.scanHash(data, data.length - 1, 0x000008ff);
-        var nonce = res[0], hash = res[1];
-
-        console.log(nonce, new Date - t);
-        console.log(sha256.BufferFromUint32Array(hash).toString('hex'));
-    });
-
-    it('scanhash4b', function() {
-        var salt = sha256.Uint32ArrayFromBuffer(Buffer.from('70617373776f7262', 'hex'));
-        var data = new Uint32Array(salt.length + 1);
-        data.set(salt, 0);
-
-        var t = new Date;
-
-        console.log(data);
-
-        var res = miner.scanHash(data, data.length - 1, 0x000008ff);
-        var nonce = res[0], hash = res[1];
-
-        console.log(nonce, new Date - t);
-        console.log(sha256.BufferFromUint32Array(hash).toString('hex'));
+        assert.equal(nonce, 11131);
+        assert.equal(minerUtil.BufferFromUint32Array(hash).toString('hex'), "00050b9fc5c037f3ce3818ba21f718ee3cbf994e63d895d08a05a171799e9ab1");
     });
 });

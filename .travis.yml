@@ -1,0 +1,35 @@
+language: node_js
+
+branches:
+  only:
+    - master
+
+node_js:
+  - '4'
+  - node
+
+matrix:
+  include:
+    - node_js: 0.12
+      env: SAUCELABS=true
+
+before_install:
+  - git submodule update --init --recursive
+  - npm install -g grunt-cli mocha
+  - npm install
+
+script:
+ - sh -c 'if [ "$SAUCELABS" = "false" ]; then mocha; fi';
+ - sh -c 'if [ "$SAUCELABS" = "false" ]; then npm run-script lint; fi';
+
+ - sh -c 'if [ "$SAUCELABS" = "true" ]; then grunt build; fi';
+ - sh -c 'if [ "$SAUCELABS" = "true" ]; then grunt test-browser; fi';
+
+env:
+  global:
+    # SAUCE_ACCESS_KEY
+    - secure: SThKb6AQ8TathaDx7mwAEowIRriBFQakyAElGcK+YNR01YoOqyRDW3YGbIwM788rbhHUwgApS2cEaquwZVVpQanMzTmw9cLEi4otYCZJmdekyGzDqvGvN0FhYjgopRsG+pbwrGYnjUPkw6WgJ2Kh90jG8KAcGwEQAHWmqV+63nKT84yDjZbb3ZsLQaklYFMDekgUngk+epBooKBtkiaSUoj83pO3cXzQMnQQtiQ0Mxr95jqUYzv1xemqFl2klkHc4IRWbUgTP+PXD8qE1QMjBedYrzzkwrokM8cICLrQVDcmuF3Zypj1tsGW05/Fx2zw+SzTYYPH/pbdXLFL/CR4ZoPLXAZSosEeULAj7deGIg8sNyPzoc7Css2BLt1D3IdmRvc0IfikoMla6yZu7Ek8j5OZz9pZ7TIUGVsrL3c/E6Zn2I0OHszCrRFFV8OQSD6RbXHfOJNEe6Kv0WgD5BFx/k8u+LIY0pNgg44VIiMHK7RxRxYXUEWaaUUng/S0qvhekxauvrWXuqZR6/bGPZBt9yOrOAKI51i22ortkDs0gEAs3LI83d+1wCqc5Pwi+elQh/Kha0dmGwDraSQtqllu2hkIF5DISeVQ75pLawNWktid3g7Y+oBii2voovuAU24bdfzH8lwvfE2b6XyaBiOPsRTRe4kiimVE1FOh3KvHqEc=
+    # SAUCE_USERNAME
+    - secure: gHncnhh7nRm71mmHDYh3ItaPtIjfOc+8WOyBIz6MRxvlCEJ2grjw6XfXlNDKqL4Txu33lEWtE8Q1IaXX4YwZ25nhE+LlY5v//1Xl4seyfg2vcLApR9YWgwXFNbnAYGJvQ1JW5mq7uj9f4H6lAmtOsv/PyUDipRxLD7uOYwmBYXD8P/GRkdta3d9H4HXVVd3Qv8KmtUWzMG1yjZJgddOdzwE6GnygkjArimkeYv6aqIIufiuWpfwShaqgScNiWqYOygaPDBPlOvo+UIUYe8Bfrdw84WCYqchdKHKVOSWi4KYaynrZW5aF3PmLHjpQi/ukJB5Rs+RYVoTZvujygM1LZLCgOMDoA0GQgLnewuE+ybLk2Te3OvXDXUbi3/vXhV36qDYsioUVUjKSa02lYE7rd3yDpx+69AoqI7habZzDxmo9iVrN3y9ErB4y1T1wDMhSTo7D8ZcZh937XD1iLHBfToRIuHxx3kcZ1AotrT9khWcOVBxNVfI2ADsb0mq3A0cRJPNlwBPSeRa4XmfxjnYitQRW1XaW2XoCamimNoQJ++5gFklTqnMmFkn8huui+c3SzRpnGLhRO939LH1kuqFfxGHsPohaF8RSM1PZniGoylnnXXG5v9tQ4wkqoZXR2E25ddPsYNS+6pHHANF4LSCJkQEjps84MECWTMkElDsUSOY=
+  matrix:
+    - SAUCELABS=false

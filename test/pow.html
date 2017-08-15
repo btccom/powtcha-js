@@ -1,0 +1,116 @@
+<html>
+<head>
+    <style>
+        body {
+            width: 60%;
+            text-align: center;
+        }
+
+        input, select {
+            min-width: 85%;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        label {
+            min-width: 10%;
+            display: inline-block;
+        }
+
+        button {
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            margin: 10px;
+        }
+
+    </style>
+
+    <script type="text/javascript" src="../build/powtcha.js"></script>
+    <script type="text/javascript">
+        window.onload = function() {
+            document.getElementById('go').onclick = function() {
+                document.getElementById('go').disabled = true;
+                document.getElementById('nonce').value = "";
+                document.getElementById('hash').value = "";
+                document.getElementById('time').value = "";
+                document.getElementById('timeperhash').value = "";
+                document.getElementById('hashpersec').value = "";
+
+                var salt = powtcha.Buffer.from(document.getElementById('salt').value, 'utf-8');
+
+                var target = null;
+                switch (document.getElementById('target').value) {
+                    case "0": target = powtcha.PoWtcha.TARGET.EASY; break;
+                    case "1": target = powtcha.PoWtcha.TARGET.MEDIUM; break;
+                    default:
+                    case "2": target = powtcha.PoWtcha.TARGET.HARD; break;
+                    case "3": target = powtcha.PoWtcha.TARGET.VERY_HARD; break;
+                }
+
+                var t = new Date();
+                powtcha.PoWtcha.work(salt, target).then(function(res) {
+                    var nonce = res[0], extraNonce = res[1], hash = res[2].toString('hex');
+                    var tt = new Date() - t;
+
+                    document.getElementById('nonce').value = nonce;
+                    document.getElementById('hash').value = hash;
+                    document.getElementById('time').value = tt;
+                    document.getElementById('timeperhash').value = tt / nonce;
+                    document.getElementById('hashpersec').value = (nonce / tt) * 1000;
+                })
+                    .then(function() {
+                    }, function(e) {
+                        alert("" + e);
+                        console.log(e);
+                    })
+                    .then(function() {
+                        document.getElementById('go').disabled = false;
+                    });
+            }
+        };
+    </script>
+</head>
+<body>
+    <div>
+        <label>difficulty:</label>
+        <select id="target">
+            <option value="0">EASY</option>
+            <option value="1">MEDIUM</option>
+            <option selected value="2">HARD</option>
+            <option value="3">VERY_HARD</option>
+        </select>
+        <br />
+
+        <label>salt:</label>
+        <input type="text" id="salt" value="fefefefe121212918281218281gg" />
+        <br />
+
+        <button id="go">WORK</button>
+    </div>
+
+    <hr />
+
+    <div>
+        <label>nonce:</label>
+        <input type="text" disabled id="nonce" value="" />
+        <br />
+
+        <label>hash:</label>
+        <input type="text" disabled id="hash" value="" />
+        <br />
+
+        <label>time:</label>
+        <input type="text" disabled id="time" value="" />
+        <br />
+
+        <label>timeperhash:</label>
+        <input type="text" disabled id="timeperhash" value="" />
+        <br />
+
+        <label>hashpersec:</label>
+        <input type="text" disabled id="hashpersec" value="" />
+        <br />
+    </div>
+</body>
+</html>
