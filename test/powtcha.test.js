@@ -1,8 +1,40 @@
+/* jshint -W101 */
 var assert = require('assert');
 
 var PoWtcha = require('../').PoWtcha;
 
 describe('PoWtcha', function() {
+    it('hash', function() {
+        assert.equal(PoWtcha.hash(Buffer.from('fe23fe23fe23fe23fe23', 'hex'), 0, 17257).toString('hex'), "00083a05d3e663172298d78ac73ee9eff7655604932e227c8dfd19710729a301");
+        assert.equal(PoWtcha.hash(Buffer.from('fe23fe23fe23fe23fe23', 'hex'), 0, 18680).toString('hex'), "00037ea7ae8fc8c43593dc49e0b35f81773390f3112f7f34ad56eddc094e7b01");
+        assert.equal(PoWtcha.hash(Buffer.from('fe23fe23fe23fe23fe23', 'hex'), 0, 282381).toString('hex'), "00001f4ff0639dc8ae6bd5929750d4a3ef5d1b0146c5d5d229b9db9fbe8eadcb");
+        assert.equal(PoWtcha.hash(Buffer.from('fe23fe23fe23fe23fe23', 'hex'), 282381, 282381).toString('hex'), "4638a7d8e7d55e1d48fdcf3695c693b7c1b73df93c583ba63cfa8da091833b14");
+        assert.equal(PoWtcha.hash(Buffer.from('fe23fe23', 'hex'), 0, 17257).toString('hex'), "3a5746cdf2fda8f7928f9e60a2704ee29ae81206eff8e2394e9efeedd736f175");
+        assert.equal(PoWtcha.hash(Buffer.from('fe23fe23fe23fe23fe23fe23fe23fe23', 'hex'), 0, 17257).toString('hex'), "295aaf021ab3d76cc2955f5185aa4ce5dec2b436dc5be91bddf26b06d3f84547");
+    });
+
+    it('validateTarget', function() {
+        var vectors = [
+            [Buffer.from('00083a05d3e663172298d78ac73ee9eff7655604932e227c8dfd19710729a301', 'hex'), 0x000fffff, 0x00057fff],
+            [Buffer.from('00037ea7ae8fc8c43593dc49e0b35f81773390f3112f7f34ad56eddc094e7b01', 'hex'), 0x00057fff, 0x0000ffff],
+            [Buffer.from('00001f4ff0639dc8ae6bd5929750d4a3ef5d1b0146c5d5d229b9db9fbe8eadcb', 'hex'), 0x0000ffff, null],
+            [Buffer.from('4638a7d8e7d55e1d48fdcf3695c693b7c1b73df93c583ba63cfa8da091833b14', 'hex'), null, 0x0fffffff]
+        ];
+
+        vectors.forEach(function(vector) {
+            var hash = vector[0];
+            var shouldMatchTarget = vector[1];
+            var shouldNotMatchTarget = vector[2];
+
+            if (shouldMatchTarget) {
+                assert(PoWtcha.validateTarget(hash, shouldMatchTarget));
+            }
+            if (shouldNotMatchTarget) {
+                assert(!PoWtcha.validateTarget(hash, shouldNotMatchTarget));
+            }
+        });
+    });
+
     it('work1 EASY', function(cb) {
         var powtcha = new PoWtcha({
             salt: Buffer.from('fe23fe23fe23fe23fe23', 'hex'),
