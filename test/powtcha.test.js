@@ -10,10 +10,10 @@ describe('PoWtcha', function() {
         });
 
         powtcha.findNonce().then(function(res) {
-            var nonce = res[0], extraNonce = res[1], hash = res[2];
-            assert.equal(nonce, 17257);
-            assert.equal(extraNonce, 0);
-            assert.equal(hash.toString('hex'), '00083a05d3e663172298d78ac73ee9eff7655604932e227c8dfd19710729a301');
+            assert.equal(res.nonce, 17257);
+            assert.equal(res.extraNonce, 0);
+            assert.equal(res.hash, '00083a05d3e663172298d78ac73ee9eff7655604932e227c8dfd19710729a301');
+            assert.equal(res.salt, 'fe23fe23fe23fe23fe23');
 
             cb();
         })
@@ -28,10 +28,10 @@ describe('PoWtcha', function() {
         });
 
         powtcha.findNonce().then(function(res) {
-            var nonce = res[0], extraNonce = res[1], hash = res[2];
-            assert.equal(nonce, 18680);
-            assert.equal(extraNonce, 0);
-            assert.equal(hash.toString('hex'), '00037ea7ae8fc8c43593dc49e0b35f81773390f3112f7f34ad56eddc094e7b01');
+            assert.equal(res.nonce, 18680);
+            assert.equal(res.extraNonce, 0);
+            assert.equal(res.hash, '00037ea7ae8fc8c43593dc49e0b35f81773390f3112f7f34ad56eddc094e7b01');
+            assert.equal(res.salt, 'fe23fe23fe23fe23fe23');
 
             cb();
         })
@@ -46,10 +46,10 @@ describe('PoWtcha', function() {
         });
 
         powtcha.findNonce().then(function(res) {
-            var nonce = res[0], extraNonce = res[1], hash = res[2];
-            assert.equal(nonce, 282381);
-            assert.equal(extraNonce, 0);
-            assert.equal(hash.toString('hex'), '00001f4ff0639dc8ae6bd5929750d4a3ef5d1b0146c5d5d229b9db9fbe8eadcb');
+            assert.equal(res.nonce, 282381);
+            assert.equal(res.extraNonce, 0);
+            assert.equal(res.hash, '00001f4ff0639dc8ae6bd5929750d4a3ef5d1b0146c5d5d229b9db9fbe8eadcb');
+            assert.equal(res.salt, 'fe23fe23fe23fe23fe23');
 
             cb();
         })
@@ -84,10 +84,10 @@ describe('PoWtcha', function() {
                 assert(i < 10);
             }
 
-            var nonce = res[0], extraNonce = res[1], hash = res[2];
-            assert.equal(nonce, 282381);
-            assert.equal(extraNonce, 0);
-            assert.equal(hash.toString('hex'), '00001f4ff0639dc8ae6bd5929750d4a3ef5d1b0146c5d5d229b9db9fbe8eadcb');
+            assert.equal(res.nonce, 282381);
+            assert.equal(res.extraNonce, 0);
+            assert.equal(res.hash, '00001f4ff0639dc8ae6bd5929750d4a3ef5d1b0146c5d5d229b9db9fbe8eadcb');
+            assert.equal(res.salt, 'fe23fe23fe23fe23fe23');
 
             cb();
         })
@@ -124,10 +124,10 @@ describe('PoWtcha', function() {
                     assert(tt2 > 0.7 * tt1, "tt1=" + tt1 + " tt2=" + tt2);
                 }
 
-                var nonce = res[0], extraNonce = res[1], hash = res[2];
-                assert.equal(nonce, 282381);
-                assert.equal(extraNonce, 0);
-                assert.equal(hash.toString('hex'), '00001f4ff0639dc8ae6bd5929750d4a3ef5d1b0146c5d5d229b9db9fbe8eadcb');
+                assert.equal(res.nonce, 282381);
+                assert.equal(res.extraNonce, 0);
+                assert.equal(res.hash, '00001f4ff0639dc8ae6bd5929750d4a3ef5d1b0146c5d5d229b9db9fbe8eadcb');
+                assert.equal(res.salt, 'fe23fe23fe23fe23fe23');
 
                 cb();
             })
