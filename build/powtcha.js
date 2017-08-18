@@ -358,6 +358,7 @@ var PoWtcha = function(options) {
 
     this.useWebWorker = typeof options.useWebWorker !== "undefined" ? !!options.useWebWorker : true;
 
+
     this.working = null;
 };
 
@@ -437,6 +438,7 @@ PoWtcha.prototype._work = function(useWebWorker) {
         return new Promise(function(resolve, reject) {
             /* jshint -W003 */
             var extraNonce = 0;
+            var t = new Date();
 
             var doWork = function(salt) {
                 return webworkifier({
@@ -449,9 +451,12 @@ PoWtcha.prototype._work = function(useWebWorker) {
                         return work();
                     }
 
+                    var tt = new Date() - t;
                     var nonce = result[0], hash = minerUtil.BufferFromUint32Array(result[1]);
 
                     return {
+                        webworker: true,
+                        time: tt,
                         salt: self.salt.toString('hex'),
                         nonce: nonce,
                         extraNonce: extraNonce,
@@ -468,6 +473,7 @@ PoWtcha.prototype._work = function(useWebWorker) {
                 .then(resolve, reject);
         });
     } else {
+        var t = new Date();
         var res;
         var extraNonce = -1;
         do {
@@ -478,9 +484,12 @@ PoWtcha.prototype._work = function(useWebWorker) {
             );
         } while (!res[0]);
 
+        var tt = new Date() - t;
         var nonce = res[0], hash = minerUtil.BufferFromUint32Array(res[1]);
 
         return Promise.resolve({
+            webworker: false,
+            time: tt,
             salt: self.salt.toString('hex'),
             nonce: nonce,
             extraNonce: extraNonce,
